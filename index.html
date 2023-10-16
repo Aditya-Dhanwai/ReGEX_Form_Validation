@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+
+    <title>Form Validation</title>
+    <script>
+        function validateUsername(username) {
+            let usernameRegex = /^[a-z A-Z 0-9]{3,20}$/;
+            return username.match(usernameRegex) !== null;
+        }
+
+        function validateEmail(email) {
+            let emailRegex = /^[a-zA-Z][a-zA-Z0-9]{1,15}(\.[a-zA-Z0-9]{1,15}){0,5}@[a-zA-Z0-9]{1,15}(\.[a-zA-Z0-9]{2,15}){1,5}$/;
+            return email.match(emailRegex) !== null;
+        }
+
+        function validatePhone(phone) {
+            let phoneRegex = /^(\+[0-9]{1,3})?[6-9][0-9]{9}$/;
+            return phone.match(phoneRegex) !== null;
+        }
+
+//         function validatePassword(password) {
+//     let strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@\+\-\*\#\^\$\&]).{8,12}$/;
+//     let moderatePasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,12}$/;
+//     let weakPasswordRegex = /^(?=.*[a-z])(?=.*[0-9]).{1,8}$/;
+
+//     if (strongPasswordRegex.test(password)) {
+//         return "Your entered password is Strong: at least one lowercase, one uppercase, one digit, and one special character, 8-12 characters.";
+//     } else if (moderatePasswordRegex.test(password)) {
+//         return "Your entered password is Moderate: includes at least one lowercase, one uppercase, and one digit, 6-12 characters.";
+//     } else if (weakPasswordRegex.test(password)) {
+//         return "Your entered password is Weak: includes at least one lowercase and one digit, 1-8 characters.";
+//     } else {
+//         return "Invalid password";
+//     }
+// }
+function validatePassword(password) {
+            let strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@\+\-\*\#\^\$\&]).{8,12}$/;
+            let moderatePasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,12}$/;
+            let weakPasswordRegex = /^(?=.*[a-z])(?=.*[0-9]).{1,8}$/;
+
+            if (strongPasswordRegex.test(password)) {
+                return { message: "Your entered password is Strong: at least one lowercase, one uppercase, one digit, and one special character, 8-12 characters.", color: "green" };
+            } else if (moderatePasswordRegex.test(password)) {
+                return { message: "Your entered password is Moderate: includes at least one lowercase, one uppercase, and one digit, 6-12 characters.", color: "orange" };
+            } else if (weakPasswordRegex.test(password)) {
+                return { message: "Your entered password is Weak: includes at least one lowercase and one digit, 1-8 characters.", color: "blue" };
+            } else {
+                return { message: "Invalid password", color: "red" };
+            }
+        }
+
+        function updateUsernameValidation() {
+            let username = document.getElementById("username").value;
+            let errorUsername = document.getElementById("error-username");
+
+            if (validateUsername(username)) {
+                errorUsername.textContent = "";
+            } else {
+                errorUsername.textContent = "Invalid username format";
+            }
+        }
+
+        function updateEmailValidation() {
+            let email = document.getElementById("email").value;
+            let errorEmail = document.getElementById("error-email");
+
+            if (validateEmail(email)) {
+                errorEmail.textContent = "";
+            } else {
+                errorEmail.textContent = "Invalid email format";
+            }
+        }
+
+        function updatePhoneValidation() {
+            let phone = document.getElementById("phone").value;
+            let errorPhone = document.getElementById("error-phone");
+
+            if (validatePhone(phone)) {
+                errorPhone.textContent = "";
+            } else {
+                errorPhone.textContent = "Invalid phone number format";
+            }
+        }
+
+        // function updatePasswordValidation() {
+        //     let password = document.getElementById("password").value;
+        //     let errorPassword = document.getElementById("error-password");
+        //     errorPassword.textContent = validatePassword(password);
+        // }
+        function updatePasswordValidation() {
+            let password = document.getElementById("password").value;
+            let errorPassword = document.getElementById("error-password");
+            const validationResult = validatePassword(password);
+            errorPassword.textContent = validationResult.message;
+            errorPassword.style.color = validationResult.color;
+        }
+        
+    </script>
+    <script>
+        // Function to toggle password visibility
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
+            var toggleIcon = document.getElementById("toggle-password");
+    
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    
+        // Rest of your existing JavaScript code
+        function confirmPassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm-password").value;
+        var errorConfirmPassword = document.getElementById("error-confirm-password");
+
+        if (password === confirmPassword) {
+            errorConfirmPassword.textContent = "Password match";
+            errorConfirmPassword.style.color = "green";
+        } else {
+            errorConfirmPassword.textContent = "Passwords do not match";
+            errorConfirmPassword.style.color = "red";
+        }
+    }
+    </script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1 class="heading">Sign Up</h1>
+        <form action="/validate" method="post" onsubmit="return validateForm()" class="mt-4">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="srk0237" oninput="updateUsernameValidation()" required>
+                <span id="error-username" class="error"></span>
+            </div>
+    
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Examp*e@123" oninput="updatePasswordValidation()" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i id="toggle-password" class="fa fa-eye" onclick="togglePasswordVisibility()"></i>
+                        </span>
+                    </div>
+                </div>
+                <span id="error-password" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm your password" oninput="confirmPassword()" required>
+                </div>
+                <span id="error-confirm-password" class="error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" id="email" name="email" placeholder="example@gmail.com" oninput="updateEmailValidation()" required>
+                <span id="error-email" class="error"></span>
+            </div>
+    
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input class="form-control" id="phone" type="tel" name="phone" placeholder="+919421636870" oninput="updatePhoneValidation()" required>
+                <span id="error-phone" class="error"></span>
+            </div>
+    
+            <button type="submit" class="btn btn-primary submit-button">Submit</button>
+        </form>
+    </div>
+    
+</body>
+</html>
